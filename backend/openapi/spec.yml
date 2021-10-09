@@ -1,0 +1,121 @@
+#version de openapi
+openapi: 3.0.0
+
+#Informacion
+info:
+  title: DMS - Taller de APIs REST con OpenAPI
+  version: '1.0'
+  description: API REST de ejemplo para el taller de OpenAPI con Connexion en la asignatura Diseño y Mantenimiento del Software - Grado en Ingeniería Informática de la Universidad de Burgos.
+
+#lista de servidores
+servers:
+  - url: /api/v1
+
+#EndPoints  
+paths:
+  /helloworld: #Nombre (sustantivo)
+    get:
+      summary: Devuelve el mensaje clásico  #Resumen
+      operationId: rest.controllers.tutor.get_helloworld  #Metodo que procesa la peticion
+      
+      #Respuestas a la peticion
+      responses:
+        '200':
+          description: Mensaje "¡Hola, Mundo!"
+          content:
+            'text/plain':
+              schema:
+                type: string
+                example: '¡Hola, Mundo!'
+      tags: #Sirve para organizar la api
+        - tutor
+
+  /about: #Nombre (sustantivo)
+    get:
+      summary: Devuelve el nombre del autor de la api  #Resumen
+      operationId: rest.controllers.alumno.get_about  #Metodo que procesa la peticion
+      
+      #Respuestas a la peticion
+      responses:
+        '200':
+          description: Obtiene el nombre del autor
+          content:
+            'text/plain':
+              schema:
+                type: string
+                example: 'Daniel Alonso Báscones'
+      tags: #Sirve para organizar la api
+        - alumno
+
+  /users:
+      get:
+        summary: Devuelve un listado de usuarios
+        operationId: rest.controllers.tutor.get_users
+        responses:
+          '200':
+            description: Lista de usuarios
+            content:
+              'application/json':
+                schema:
+                  $ref: '#/components/schemas/UserListModel'
+        tags:
+          - tutor
+
+  /courses:
+    get:
+      summary: Devuelve un listado de asignaturas
+      operationId: rest.controllers.alumno.get_courses
+      responses:
+        '200':
+          description: Lista de asignaturas
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/CoursesListModel'  
+      tags:
+        - alumno
+
+components:
+  schemas:
+    UserModel:
+      description: Datos de un usuario individual.
+      type: object
+      properties:
+        uid:
+          type: integer
+        name:
+          type: string
+      required:
+        - uid
+        - name
+    UserListModel:
+      description: Listado de usuarios.
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserModel'
+      required:
+        - users
+    CourseModel:
+      description: Datos de una asignatura individual.
+      type: object
+      properties:
+        courseid:
+          type: integer
+        name:
+          type: string
+      required:
+        - courseid
+        - name
+    CoursesListModel:
+      description: Listado de asignaturas.
+      type: object
+      properties:
+        courses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoursesListModel'
+      required:
+        - courses
